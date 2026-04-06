@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab-vllm
+  namespace: inference-lab
+  labels:
+    app: lab-vllm
+spec:
+  restartPolicy: Never
+  containers:
+    - name: vllm
+      image: vllm/vllm-openai:latest
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - >
+          python3 -m vllm.entrypoints.openai.api_server
+          --model mistralai/Mistral-7B-Instruct-v0.2
+          --dtype auto
+          --gpu-memory-utilization 0.9
+          --max-model-len 4096
+          --max-num-batched-tokens 8192
+          --port 8000
+      env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-secret
+              key: token
+        - name: HF_HOME
+          value: /tmp/huggingface
+        - name: TRANSFORMERS_CACHE
+          value: /tmp/huggingface
+        - name: VLLM_CACHE_ROOT
+          value: /tmp/vllm
+        - name: HOME
+          value: /tmp
+        - name: XDG_CACHE_HOME
+          value: /tmp/.cache
+      ports:
+        - containerPort: 8000
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+        requests:
+          nvidia.com/gpu: 1
