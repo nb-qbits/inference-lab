@@ -37,13 +37,13 @@ chmod +x bootstrap.sh demo.sh
 ./bootstrap.sh
 
 
-## Run Full Demo
+## Option 1: Run Full Demo in one click
 source venv/bin/activate
 HF_TOKEN=your_actual_hf_token ./demo.sh
 
 open outputs/reports/report.html
 
-## Interactive Experiment Mode
+## Option 2: Interactive Experiment Mode
 
 source venv/bin/activate
 python3 -m app.run_experiment
