@@ -46,7 +46,11 @@ open outputs/reports/report.html
 ## Option 2: Interactive Experiment Mode
 
 source venv/bin/activate
-python3 -m app.run_experiment
+$python3 -m app.run_experiment
+
+$python3 -m app.plot_results
+$python3 -m app.generate_report
+$open outputs/reports/report.html
 
 ##Standard Demo Defaults
 
