@@ -173,6 +173,7 @@ def generate_html(env, data):
 
     <div class="card">
         <h2>📈 Charts</h2>
+        <img src="gpu_heatmap.png" width="700"><br>
         <img src="tokens_per_sec.png" width="700"><br>
         <img src="latency.png" width="700"><br>
         <img src="rps.png" width="700"><br>

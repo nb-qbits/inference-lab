@@ -20,7 +20,7 @@ spec:
           --dtype auto
           --gpu-memory-utilization 0.9
           --max-model-len 4096
-          --max-num-batched-tokens 8192
+          --max-num-batched-tokens 1024
           --port 8000
       env:
         - name: HUGGING_FACE_HUB_TOKEN

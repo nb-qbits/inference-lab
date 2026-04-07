@@ -70,6 +70,10 @@ python3 -m app.run_batching_suite
 echo "📊 Generating charts..."
 python3 -m app.plot_results
 
+echo " Generating Heatmap.."
+python3 -m app.plot_gpu_heatmap
+
+
 echo "📝 Generating report..."
 python3 -m app.generate_report
 

@@ -6,6 +6,9 @@ from pathlib import Path
 
 from app.render_config import render_template
 from app.load_test import run_load
+from app.gpu_monitor import start_gpu_capture, stop_gpu_capture
+
+
 
 TEMPLATE = "templates/vllm_pod_template.yaml"
 PROFILE = "profiles/profile_default.yaml"
@@ -82,17 +85,25 @@ def run_one(batching_value):
     deploy()
     wait_until_ready()
 
-    summary = run_load(
-        total_requests=TOTAL_REQUESTS,
-        concurrency=CONCURRENCY,
-        prompt=PROMPT,
-        max_tokens=MAX_TOKENS,
-    )
+    # Start GPU capture just before load
+    gpu_proc, gpu_file, gpu_csv = start_gpu_capture(str(batching_value))
+
+    try:
+        summary = run_load(
+            total_requests=TOTAL_REQUESTS,
+            concurrency=CONCURRENCY,
+            prompt=PROMPT,
+            max_tokens=MAX_TOKENS,
+        )
+    finally:
+        stop_gpu_capture(gpu_proc, gpu_file)
+
     summary["max_num_batched_tokens"] = batching_value
     summary["prompt"] = PROMPT
     summary["max_tokens"] = MAX_TOKENS
     summary["total_requests"] = TOTAL_REQUESTS
     summary["concurrency"] = CONCURRENCY
+    summary["gpu_csv"] = gpu_csv
 
     save_result(batching_value, summary)
 
